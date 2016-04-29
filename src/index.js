@@ -501,9 +501,18 @@ module.exports = React.createClass({
         pages.push(0)
       }
 
-      pages = pages.map((page, i) =>
-        <View style={pageStyle} key={i}>{children[page]}</View>
-      )
+      pages = pages.map((page, i) => {
+        let content = null
+        function withInRangeOf(range) {
+          return Math.abs(i - range - 1) <= 1
+        }
+        // using (withInRangeOf(index) || withInRangeOf(index + total) || withInRangeOf(index - total)) to solve fl
+
+        if (withInRangeOf(index) || withInRangeOf(index + total) || withInRangeOf(index - total)) {
+          content = children[page]
+        }
+        return <View style={pageStyle} key={i}>{content}</View>
+      })
     }
     else pages = <View style={pageStyle}>{children}</View>
 
